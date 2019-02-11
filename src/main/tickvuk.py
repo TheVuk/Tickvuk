@@ -230,13 +230,12 @@ class TickVuk(VukWrapper, VukClient):
                         #print(str(time.strftime("%D %H:%M:%S", time.localtime(int(tick.time))))+","+str(tick.price)+","+str(tick.size))
                         filewriter.writerow([str(time.strftime("%D %H:%M:%S", time.localtime(int(tick.time)))), str(tick.price),str(tick.size)])
                         i=i+1
-                        wapm_obj.algo(time.strftime("%D %H:%M:%S", time.localtime(int(tick.time))),tick.price)
+                        wapm_obj.algo(tick.time,tick.price)
                         if (i==1000):
-                            #self.reqHistoricalTicks(randint(10, 999), self.contract,
-                            #        str(self.HDATE)+" "+str(time.strftime("%H:%M:%S", time.localtime(int(tick.time)))), "", 1000, "TRADES", 1, True, [])
+                            self.reqHistoricalTicks(randint(10, 999), self.contract,
+                                    str(self.HDATE)+" "+str(time.strftime("%H:%M:%S", time.localtime(int(tick.time)))), "", 1000, "TRADES", 1, True, [])
                             break
                 else:
-                    
                     for i, tick in enumerate(ticks, start=1):
                         #print(str(time.strftime("%D %H:%M:%S", time.localtime(int(tick.time))))+","+str(tick.price)+","+str(tick.size))
                         filewriter.writerow([str(time.strftime("%D %H:%M:%S", time.localtime(int(tick.time)))), str(tick.price),str(tick.size)])
@@ -287,6 +286,7 @@ def main():
         if(app.SECTYPE == "STK"):
             app.contract.secType = app.SECTYPE
         elif(app.SECTYPE == "FUT"):
+            app.contract.secType = app.SECTYPE
             app.contract.lastTradeDateOrContractMonth = app.EXPIRY
         elif(app.SECTYPE == "OPT"):
             app.contract.secType = app.SECTYPE
