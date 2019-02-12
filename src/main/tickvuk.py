@@ -22,12 +22,14 @@ import sys
 sys.path.append(os.getcwd())
 import Tickvuk.__init__ as tickvuk
 from Tickvuk.src.loghandler.logger import main_logger
+from Tickvuk.src.algos.sapm import sapm_algo
 from Tickvuk.src.algos.wapm import wapm_algo
 
 #parser = tickvuk.parser
 #parser.read(Tickvuk.__init__.CONFIG_PATH)
 
 wapm_obj = wapm_algo.WapmAlgo()
+sapm_obj = sapm_algo.SapmAlgo()
 
 def clear():
     if os.name in ('nt','dos'):
@@ -230,7 +232,8 @@ class TickVuk(VukWrapper, VukClient):
                         #print(str(time.strftime("%D %H:%M:%S", time.localtime(int(tick.time))))+","+str(tick.price)+","+str(tick.size))
                         filewriter.writerow([str(time.strftime("%D %H:%M:%S", time.localtime(int(tick.time)))), str(tick.price),str(tick.size)])
                         i=i+1
-                        wapm_obj.algo(tick.time,tick.price)
+                        sapm_obj.algo(tick.time,tick.price)
+                        #wapm_obj.algo(tick.time,tick.price)
                         if (i==1000):
                             self.reqHistoricalTicks(randint(10, 999), self.contract,
                                     str(self.HDATE)+" "+str(time.strftime("%H:%M:%S", time.localtime(int(tick.time)))), "", 1000, "TRADES", 1, True, [])

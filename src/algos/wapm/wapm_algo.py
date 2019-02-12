@@ -6,6 +6,7 @@ import datetime
 import time
 import Tickvuk.__init__ as tickvuk
 
+
 class WapmAlgo():
 
     def algo(self, ticktime, tickprice):
@@ -13,14 +14,14 @@ class WapmAlgo():
             if (tickprice >= (wo.LSL_Price + wo.SL + wo.TSL)):
                 wo.LSL_Price = wo.LSL_Price + wo.TSL
             elif(tickprice <= wo.LSL_Price):
-                print("* LONG BUY EXIT * ,"+str(time.strftime("%D %H:%M:%S", time.localtime(int(ticktime))))+","+str(tickprice))
+                print(str("* LONG EXIT * ,"+str(time.strftime("%D %H:%M:%S", time.localtime(int(ticktime))))+","+str(tickprice)))
                 wo.LBuy_Position = False
                 wo.No_Trades = wo.No_Trades +1
         if (wo.SSell_Position == True):
             if (tickprice <= (wo.SSL_Price - wo.SL - wo.TSL)):
                 wo.SSL_Price = wo.SSL_Price - wo.TSL
             elif(tickprice >= wo.SSL_Price):
-                print("* SHORT SELL EXIT * ,"+str(time.strftime("%D %H:%M:%S", time.localtime(int(ticktime))))+","+str(tickprice))
+                print(str("* SHORT EXIT * ,"+str(time.strftime("%D %H:%M:%S", time.localtime(int(ticktime))))+","+str(tickprice)))
                 wo.SSell_Position = False
                 wo.No_Trades = wo.No_Trades +1  
 
@@ -36,15 +37,15 @@ class WapmAlgo():
                     wo.avgs[0] = wo.avgs[1]
                     wo.avgs[1] = wo.avgs[2]
                     wo.avgs[2] = (sum_value / len(wo.titicks))
-                    wapm_logger.info("*Avg - "+str(wo.avgs[2]) + ", TickTime - "+str(time.strftime("%D %H:%M:%S", time.localtime(int(ticktime)))))
+                    #print("*Avg - "+str(wo.avgs[2]) + ", TickTime - "+str(time.strftime("%D %H:%M:%S", time.localtime(int(ticktime)))))
                 if (len(wo.avgs) == 3):
                     pv_delta = (wo.avgs[2] - wo.avgs[0])/wo.avgs[2]*100
                     if (pv_delta >=  wo.DTH) & (wo.LBuy_Position == False):
-                        print("* LONG BUY ENTRY * ,"+str(time.strftime("%D %H:%M:%S", time.localtime(int(ticktime))))+","+str(tickprice))
+                        print(str("* LONG ENTRY * ,"+str(time.strftime("%D %H:%M:%S", time.localtime(int(ticktime))))+","+str(tickprice)))
                         wo.LBuy_Position = True
                         wo.LSL_Price = tickprice - wo.SL
                     if (pv_delta <=  (wo.DTH * -1)) & (wo.SSell_Position == False):
-                        print("* SHORT SELL ENTRY * ,"+str(time.strftime("%D %H:%M:%S", time.localtime(int(ticktime))))+","+str(tickprice))
+                        print(str("* SHORT ENTRY * ,"+str(time.strftime("%D %H:%M:%S", time.localtime(int(ticktime))))+","+str(tickprice)))
                         wo.SSell_Position = True
                         wo.SSL_Price = tickprice + wo.SL
                 wo.titicks.clear()
@@ -52,7 +53,6 @@ class WapmAlgo():
                 wo.titicks.append([ticktime,tickprice])
         else:
             wo.titicks.append([ticktime,tickprice])
-        
 
 if __name__ == '__main__':
     wobj = WapmAlgo()

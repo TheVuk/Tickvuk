@@ -1,8 +1,6 @@
 import Tickvuk.__init__ as tickvuk
-import csv, os
 
-class WapmObjects():
-
+class SapmObjects():
     SYMBOL = tickvuk.parser.get('common', 'symbol')
     TI = int(tickvuk.parser.get(SYMBOL, 'TI'))
     SL = int(tickvuk.parser.get(SYMBOL, 'SL'))
