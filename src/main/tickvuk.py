@@ -10,8 +10,8 @@ import csv
 import subprocess
 import sys, getopt
 from ibapi.utils import iswrapper
-from ibapi.common import * 
-from ibapi.contract import * 
+from ibapi.common import *
+from ibapi.contract import *
 from ibapi import wrapper
 from ibapi.client import EClient
 from ibapi.utils import iswrapper
@@ -178,7 +178,7 @@ class TickVuk(VukWrapper, VukClient):
         self.globalCancelOnly = False
         self.simplePlaceOid = None
         self.initVariables()
-    
+
     def initVariables(self):
         try:
             self.HDATE=tickvuk.parser.get('common', 'date')
@@ -195,7 +195,7 @@ class TickVuk(VukWrapper, VukClient):
             main_logger.error(traceback.format_exc())
         finally:
             main_logger.info("initVariable execution completed")
-    
+
     def dumpTestCoverageSituation(self):
         for clntMeth in sorted(self.clntMeth2callCount.keys()):
             main_logger.debug("ClntMeth: %-30s %6d" % (clntMeth,
@@ -232,6 +232,7 @@ class TickVuk(VukWrapper, VukClient):
                         #print(str(time.strftime("%D %H:%M:%S", time.localtime(int(tick.time))))+","+str(tick.price)+","+str(tick.size))
                         filewriter.writerow([str(time.strftime("%D %H:%M:%S", time.localtime(int(tick.time)))), str(tick.price),str(tick.size)])
                         i=i+1
+                        #hasa_obj.algo(tick.time,tick.price,tick.size)
                         sapm_obj.algo(tick.time,tick.price)
                         #wapm_obj.algo(tick.time,tick.price)
                         if (i==1000):
@@ -261,7 +262,7 @@ class TickVuk(VukWrapper, VukClient):
         print("CurrentTime:", datetime.datetime.fromtimestamp(time).strftime("%Y%m%d %H:%M:%S"))
     # ! [currenttime]
 
-    
+
 def main():
     #SetupLogger()
     main_logger.debug("Now is %s", datetime.datetime.now())
@@ -274,7 +275,7 @@ def main():
         app = TickVuk()
         clear()
         print("\n")
-        main_logger.info("Parameter set for back test :"+str(dict(tickvuk.parser.items('common'))))    
+        main_logger.info("Parameter set for back test :"+str(dict(tickvuk.parser.items('common'))))
         app.connect(app.IP, int(app.PORT), clientId=1)
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         print("~~~~~~~~~~~~~~~~~~~~~~~ Tickvuk Start's Computing ~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -284,7 +285,7 @@ def main():
         print("IB Gateway Time : %s connectionTime:%s" % (app.serverVersion(), app.twsConnectionTime()))
         print("\n")
         app.contract.symbol = app.SYMBOL
-        app.contract.currency = "INR"  
+        app.contract.currency = "INR"
         app.contract.exchange = "NSE"
         if(app.SECTYPE == "STK"):
             app.contract.secType = app.SECTYPE
@@ -297,13 +298,13 @@ def main():
             app.contract.strike = app.STRIKE
             app.contract.right = app.RIGHT
             #app.contract.multiplier = "100"
-        
+
         print("Instrument Details : "+str(app.contract))
         print("\n")
         print("Date : "+str(app.HDATE))
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         print("\n")
-        
+
         if not os.path.exists(tickvuk.parser.get('common', 'hrhd_data_path')):
             os.makedirs(tickvuk.parser.get('common', 'hrhd_data_path'))
 
@@ -313,10 +314,10 @@ def main():
             filewriter.writerow(["TIME","PRICE","SIZE"])
         app.reqHistoricalTicks(1, app.contract,
                                 str(app.HDATE)+" 09:10:00", "", 1000, "TRADES", 1, True, [])
-        
+
         app.run()
         app.disconnect()
-       
+
     except Exception :
         main_logger.error(traceback.format_exc())
         print("\n")
@@ -326,8 +327,8 @@ def main():
     finally:
         app.dumpTestCoverageSituation()
         app.dumpReqAnsErrSituation()
-        
-     
+
+
 
 if __name__ == "__main__":
     main()
