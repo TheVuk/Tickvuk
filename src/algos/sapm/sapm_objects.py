@@ -16,5 +16,5 @@ class SapmObjects():
     SS_Price = 0 #short sell Price
     No_Trades = 0
     net_profit = []
-    LB_TSL=[]
-    SS_TSL=[]
+    LB_TSL = []
+    SS_TSL = []

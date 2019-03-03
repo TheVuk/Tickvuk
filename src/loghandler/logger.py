@@ -13,8 +13,7 @@ import Tickvuk.__init__
 parser = ConfigParser()
 parser.read(Tickvuk.__init__.CONFIG_PATH)
 
-LOG_FORMAT = (
-            "%(asctime)s [%(levelname)s]: %(message)s in %(pathname)s:%(lineno)d")
+LOG_FORMAT = ("%(asctime)s [%(levelname)s]: %(message)s in %(pathname)s:%(lineno)d")
 LOG_LEVEL = logging.INFO
 
 if not os.path.exists(parser.get('common', 'log_path')):
@@ -54,3 +53,16 @@ sapm_file_handler = FileHandler(SAPM_LOG_FILE)
 sapm_file_handler.setLevel(LOG_LEVEL)
 sapm_file_handler.setFormatter(Formatter(LOG_FORMAT))
 sapm_logger.addHandler(sapm_file_handler)
+
+
+
+# hasa logger
+HASA_LOG_FORMAT = ("%(message)s")
+HASA_LOG_FILE = parser.get('common', 'log_path')+"/hasa.log"
+hasa_logger = logging.getLogger("tickvuk.hasa")
+
+hasa_logger.setLevel(LOG_LEVEL)
+hasa_file_handler = FileHandler(HASA_LOG_FILE)
+hasa_file_handler.setLevel(LOG_LEVEL)
+hasa_file_handler.setFormatter(Formatter(HASA_LOG_FORMAT))
+hasa_logger.addHandler(hasa_file_handler)
